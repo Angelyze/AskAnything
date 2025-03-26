@@ -140,7 +140,7 @@
       output.innerHTML += `<div class="message user-message">Korisnik: ${input}</div>`;
 
       const prompt = `
-        Korisnik je pitao: "${input}". Na osnovu ovih podataka sa moje stranice, odgovori na hrvatskom jeziku. Dodaj emojije (npr. 👋, 🌐, 📧, 📞, ali i sve druge gdje je primjenjivo) za prijateljski ton. Uključi linkove u formatu "https://www.angelyze.eu" ili slično ako je relevantno, bez Markdown sintakse. Formatiraj tekst sa novim redovima i listama (npr. "* tekst" za stavke liste) gdje je prikladno:
+        Korisnik je pitao: "${input}". Na osnovu ovih podataka sa moje stranice, odgovori na hrvatskom jeziku. Dodaj emojije gdje je primjenjivo, za prijateljski ton. Uključi klikabilne linkove u formatu HTML <a href="URL">tekst</a> ako je relevantno. Formatiraj tekst sa novim redovima i listama (npr. "* tekst" za stavke liste) gdje je prikladno:
         "${websiteData}"
         Ako nema informacija, daj opći odgovor: "Nemam dovoljno informacija za točno odgovoriti. 😕 Posjetite našu stranicu https://www.angelyze.eu za više detalja."
       `;
