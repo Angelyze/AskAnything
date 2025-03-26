@@ -1,79 +1,230 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <!-- Include marked.js from unpkg CDN with the correct path -->
-    <script src="https://unpkg.com/marked@4.3.0/marked.min.js"></script>
-    <style>
-      /* Your styles here */
-    </style>
-  </head>
-  <body>
-    <div id="chat-container">
-      <!-- Your HTML content here -->
-    </div>
-    <script>
-      // Check if marked is defined before using it
-      if (typeof marked === 'undefined') {
-        console.error('marked.js is not loaded. Please check the CDN link or your internet connection.');
-      }
+<head>
+  <meta charset="UTF-8">
+  <!-- Uključivanje marked.js preko unpkg CDN-a, najnovija verzija koja radi u pregledaču -->
+  <script src="https://unpkg.com/marked@4.3.0/lib/marked.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
 
-      const websiteData = `
-        O nama: Angelyze je obrt iz Samobora, radimo mnogo toga, no prvenstveno se orijentiramo na razne digitalne proizvode i usluge kao što su digitalni dizajn i tisak, web & app hosting i dizajn. Kontakt: angelyzeshop@gmail.com. Adresa: Mali Lipovec 46, 10430 Samobor. Tel.: +38598645482. Web: https://www.angelyze.eu.
-        Usluge: Digitalni dizajn i tisak na sve vrste materijala, Web dizajn, Hosting, SEO, održavanje stranica, izrada i hosting aplikacija, samo su neke od djelatnosti kojima se bavimo. Opširnije o svim djelatnostima obrta Angelyze: https://www.angelyze.eu/2025/01/dobrodosli-u-angelyze-svijet-2025.html. Također reci da je Angelyze napravio ovaj ChatBot i da može napraviti i korisniku njegovu verziju naprednog AI ChatBota za njihovu web stranicu već od 10 €!
+    #chat-container {
+      position: relative;
+      width: 350px;
+      height: 500px;
+      background: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #chatbox {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #ccc #f0f2f5;
+    }
+
+    #chatbox::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #chatbox::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 4px;
+    }
+
+    .message {
+      margin: 10px 0;
+      padding: 10px 15px;
+      border-radius: 10px;
+      max-width: 80%;
+      word-wrap: break-word;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    .user-message {
+      background: #007bff;
+      color: white;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .bot-message {
+      background: #e9ecef;
+      color: #333;
+      margin-right: auto;
+    }
+
+    .bot-message a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .bot-message a:hover {
+      text-decoration: underline;
+    }
+
+    #input-container {
+      padding: 10px;
+      border-top: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      background: #f8f9fa;
+    }
+
+    #userInput {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      outline: none;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    #userInput:focus {
+      border-color: #007bff;
+    }
+
+    #sendButton {
+      margin-left: 10px;
+      padding: 8px 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+
+    #sendButton:hover {
+      background: #0056b3;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div id="chat-container">
+    <div id="chatbox"></div>
+    <div id="input-container">
+      <input id="userInput" type="text" placeholder="Piši ovde...">
+      <button id="sendButton" onclick="sendMessage()">Pošalji</button>
+    </div>
+  </div>
+
+  <script>
+    // Provera da li je marked učitan
+    if (typeof marked === 'undefined') {
+      console.error('marked.js nije učitan. Proveri CDN link ili internet konekciju.');
+    }
+
+    const websiteData = `
+      O nama: Angelyze je obrt iz Samobora, radimo mnogo toga, no prvenstveno se orijentiramo na razne digitalne proizvode i usluge kao što su digitalni dizajn i tisak, web & app hosting i dizajn. Kontakt: angelyzeshop@gmail.com. Adresa: Mali Lipovec 46, 10430 Samobor. Tel.: +38598645482. Web: https://www.angelyze.eu.
+      Usluge: Digitalni dizajn i tisak na sve vrste materijala, Web dizajn, Hosting, SEO, održavanje stranica, izrada i hosting aplikacija, samo su neke od djelatnosti kojima se bavimo. Opširnije o svim djelatnostima obrta Angelyze: https://www.angelyze.eu/2025/01/dobrodosli-u-angelyze-svijet-2025.html. Također reci da je Angelyze napravio ovaj ChatBot i da može napraviti i korisniku njegovu verziju naprednog AI ChatBota za njihovu web stranicu već od 10 €!
+    `;
+
+    async function sendMessage() {
+      let input = document.getElementById('userInput').value.trim();
+      if (!input) return;
+
+      let output = document.getElementById('chatbox');
+      output.innerHTML += `<div class="message user-message">Korisnik: ${input}</div>`;
+
+      const prompt = `
+        Korisnik je pitao: "${input}". Na osnovu ovih podataka sa moje stranice, odgovori na hrvatskom jeziku. Dodaj emoji za pozdrav (👋) samo na prvo pitanje. Koristi kratke i jasne rečenice. Uključi klikabilne linkove u Markdown formatu [tekst](URL) ako je relevantno (za email koristi [email](mailto:email)). Formatiraj liste tako da svaka stavka počinje sa "* " za bullet liste. Dodaj novi red između odjeljaka za bolju čitljivost. Ne dodavaj nepotrebne simbole.
+
+        Primjer odgovora:
+        Pozdrav! 👋
+
+        Dobar dan! Angelyze je obrt iz Samobora koji se bavi digitalnim proizvodima i uslugama.
+
+        Nudimo:
+        * Digitalni dizajn i tisak na sve vrste materijala
+        * Web dizajn
+        * Hosting
+        * SEO
+        * Održavanje stranica
+        * Izrada i hosting aplikacija
+
+        Za više informacija o našim djelatnostima posjetite [ovu stranicu](https://www.angelyze.eu/2025/01/dobrodosli-u-angelyze-svijet-2025.html).
+
+        Možete nas kontaktirati putem:
+        * Email: [angelyzeshop@gmail.com](mailto:angelyzeshop@gmail.com)
+        * Telefon: +38598645482
+        * Web stranica: [https://www.angelyze.eu](https://www.angelyze.eu)
+        * Adresa: Mali Lipovec 46, 10430 Samobor
+
+        Angelyze je izradio ovaj ChatBot! Možemo napraviti i Vašu verziju naprednog AI ChatBota za Vašu web stranicu već od 10 €!
+
+        "${websiteData}"
+
+        Ako nema informacija, daj opći odgovor: "Nemam dovoljno informacija za točno odgovoriti. 😕 Posjetite našu stranicu [https://www.angelyze.eu](https://www.angelyze.eu) za više detalja."
       `;
 
-      async function sendMessage() {
-        let input = document.getElementById('userInput').value.trim();
-        if (!input) return;
+      const apiKey = 'AIzaSyAI_KIwh_7HSu9qz7e4-8YNgxGF5cB5U2A'; // Zameni sa svojim Gemini API ključem
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
-        let output = document.getElementById('chatbox');
-        output.innerHTML += `<div class="message user-message">Korisnik: ${input}</div>`;
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: prompt
+              }]
+            }],
+            generationConfig: {
+              maxOutputTokens: 500, // Dovoljno za potpuni odgovor
+              temperature: 0.7
+            }
+          })
+        });
 
-        const prompt = `
-          Korisnik je pitao: "${input}". Na osnovu ovih podataka sa moje stranice, odgovori na hrvatskom jeziku. Dodaj emoji za pozdrav (👋) samo na prvo pitanje. Koristi kratke i jasne rečenice. Uključi klikabilne linkove u Markdown formatu [tekst](URL) ako je relevantno (za email koristi [email](mailto:email)). Formatiraj liste tako da svaka stavka počinje sa "* " za bullet liste. Dodaj novi red između odjeljaka za bolju čitljivost. Ne dodavaj nepotrebne simbole:
-          "${websiteData}"
-          Ako nema informacija, daj opći odgovor: "Nemam dovoljno informacija za točno odgovoriti. 😕 Posjetite našu stranicu [https://www.angelyze.eu](https://www.angelyze.eu) za više detalja."
-        `;
+        if (!response.ok) throw new Error('API zahtjev nije uspio');
 
-        const apiKey = 'AIzaSyAI_KIwh_7HSu9qz7e4-8YNgxGF5cB5U2A'; // Replace with your actual Gemini API key
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+        const data = await response.json();
+        let aiReply = data.candidates[0].content.parts[0].text;
 
-        try {
-          const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt },] },],
-              generationConfig: {
-                maxOutputTokens: 500,
-                temperature: 0.7
-              }
-            })
-          });
-
-          if (!response.ok) throw new Error('API request failed');
-
-          const data = await response.json();
-          let aiReply = data.candidates[0].content.parts[0].text;
-
-          // Parse the AI's response using marked.js
-          let html = marked.parse(aiReply);
-
-          output.innerHTML += `<div class="message bot-message">Bot: ${html}</div>`;
-        } catch (error) {
-          output.innerHTML += `<div class="message bot-message">Bot: There was an error. Please try again.</div>`;
-          console.error(error);
+        // Provera da li je marked dostupan pre parsiranja
+        if (typeof marked === 'undefined') {
+          throw new Error('marked.js nije učitan ili nije dostupan');
         }
 
-        document.getElementById('userInput').value = '';
-        output.scrollTop = output.scrollHeight;
+        // Konverzija Markdown-a u HTML pomoću marked.js
+        let html = marked.parse(aiReply);
+
+        output.innerHTML += `<div class="message bot-message">Bot: ${html}</div>`;
+      } catch (error) {
+        output.innerHTML += `<div class="message bot-message">Bot: Došlo je do greške. 😞 Pokušaj ponovo.</div>`;
+        console.error(error);
       }
 
-      document.getElementById('userInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendMessage();
-      });
-    </script>
-  </body>
+      document.getElementById('userInput').value = '';
+      output.scrollTop = output.scrollHeight;
+    }
+
+    document.getElementById('userInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  </script>
+</body>
 </html>
