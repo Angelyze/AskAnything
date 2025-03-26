@@ -126,10 +126,10 @@
     </div>
   </div>
 
-  <script>
+<script>
   const websiteData = `
     O nama: Angelyze je obrt iz Samobora, radimo mnogo toga, no prvenstveno se orijentiramo na razne digitalne proizvode i usluge kao što su digitalni dizajn i tisak, web & app hosting i dizajn. Kontakt: angelyzeshop@gmail.com. Adresa: Mali Lipovec 46, 10430 Samobor. Tel.: +38598645482. Web: https://www.angelyze.eu.
-    Usluge: Digitalni dizajn i tisak na sve vrste materijala, Web dizajn, Hosting, SEO, održavanje stranica, izrada i hosting aplikacija, samo su neke od djelatnosti kojima se bavimo. Opširnije o svim djelatnostima obrta Angelyze: https://www.angelyze.eu/2025/01/dobrodosli-u-angelyze-svijet-2025.html.
+    Usluge: Digitalni dizajn i tisak na sve vrste materijala, Web dizajn, Hosting, SEO, održavanje stranica, izrada i hosting aplikacija, samo su neke od djelatnosti kojima se bavimo. Opširnije o svim djelatnostima obrta Angelyze: https://www.angelyze.eu/2025/01/dobrodosli-u-angelyze-svijet-2025.html. Također reci da je Angelyze napravio ovaj ChatBot i da može napraviti i korisniku njegovu verziju naprednog AI ChatBota za njihovu web stranicu već od 10 €!
   `;
 
   async function sendMessage() {
@@ -140,7 +140,7 @@
     output.innerHTML += `<div class="message user-message">Korisnik: ${input}</div>`;
 
     const prompt = `
-      Korisnik je pitao: "${input}". Na osnovu ovih podataka sa moje stranice, odgovori na hrvatskom jeziku. Dodaj emoji za pozdrav (👋) samo na prvo pitanje. Uključi klikabilne linkove u Markdown formatu [tekst](URL) ako je relevantno (za email koristi [email](mailto:email)). Formatiraj liste sa novim redovima bez "*". Ako koristiš podebljavanje, koristi **tekst**. Ne dodavaj nepotrebne simbole:
+      Korisnik je pitao: "${input}". Na osnovu ovih podataka sa moje stranice, odgovori na hrvatskom jeziku. Dodaj emoji za pozdrav (👋) samo na prvo pitanje. Uključi klikabilne linkove u Markdown formatu [tekst](URL) ako je relevantno (za email koristi mailto:). Formatiraj liste sa "* tekst" za bullet stavke. Dodaj novi red između odjeljaka za bolju čitljivost. Ne dodavaj nepotrebne simbole:
       "${websiteData}"
       Ako nema informacija, daj opći odgovor: "Nemam dovoljno informacija za točno odgovoriti. 😕 Posjetite našu stranicu [https://www.angelyze.eu](https://www.angelyze.eu) za više detalja."
     `;
@@ -161,7 +161,7 @@
             }]
           }],
           generationConfig: {
-            maxOutputTokens: 300, // Dovoljno za potpuni odgovor
+            maxOutputTokens: 500, // Dovoljno za potpuni odgovor
             temperature: 0.7
           }
         })
@@ -177,7 +177,9 @@
         .replace(/\n/g, '<br>') // Novi redovi
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Podebljavanje
         .replace(/\[([^\]]+)\]\((https?:\/\/[^\s]+|mailto:[^\s]+)\)/g, '<a href="$2">$1</a>') // Markdown linkovi u HTML
-        .replace(/\* (.*?)(?=\n|$)/g, '$1<br>'); // Uklanjanje "*" i pretvaranje liste u obične redove s <br>
+        .replace(/\* (.*?)(?=\n|$)/g, '<li>$1</li>') // Bullet liste u <li>
+        .replace(/(<li>.*<\/li>)/g, '<ul>$1</ul>') // Omotavanje liste u <ul>
+        .replace(/(<br>){2,}/g, '<br><br>'); // Ograničavanje višestrukih razmaka
 
       output.innerHTML += `<div class="message bot-message">Bot: ${aiReply}</div>`;
     } catch (error) {
