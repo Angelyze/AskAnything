@@ -140,13 +140,15 @@
       output.innerHTML += `<div class="message user-message">Korisnik: ${input}</div>`;
 
       const prompt = `
-        Korisnik je pitao: "${input}". Na osnovu ovih podataka sa moje stranice, odgovori na hrvatskom jeziku, koristi kratke i jasne rečenice, uključi klikabilne linkove u formatu HTML <a href="URL">tekst</a> ako je relevantno, i formatiraj tekst sa novim redovima i listama gde je potrebno:
+        Korisnik je pitao: "${input}". Na osnovu ovih podataka sa moje stranice, odgovori na hrvatskom jeziku. Uključi klikabilne linkove u formatu HTML <a href="URL">tekst</a> ako je relevantno. Formatiraj tekst sa novim redovima i listama ( حتی
+
         "${websiteData}"
-        Ako nema informacija, daj opći odgovor.
+
+        Ako nema informacija, daj opći odgovor: "Nemam dovoljno informacija za točno odgovoriti. Posjetite našu stranicu https://www.angelyze.eu za više detalja."
       `;
 
       const apiKey = 'AIzaSyAI_KIwh_7HSu9qz7e4-8YNgxGF5cB5U2A'; // Zameni sa svojim Gemini API ključem
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
       try {
         const response = await fetch(url, {
@@ -161,7 +163,7 @@
               }]
             }],
             generationConfig: {
-              maxOutputTokens: 150,
+              maxOutputTokens: 300, // Povećano za duže odgovore
               temperature: 0.7
             }
           })
@@ -172,13 +174,12 @@
         const data = await response.json();
         let aiReply = data.candidates[0].content.parts[0].text;
 
-        // Pretvaranje Markdown-a u HTML za bolje formatiranje
+        // Obrada teksta za formatiranje i linkove
         aiReply = aiReply
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Podebljavanje
           .replace(/\n/g, '<br>') // Novi redovi
-          .replace(/\* (.*?)(?=\n|$)/g, '<li>$1</li>') // Liste
+          .replace(/\* (.*?)(?=\n|$)/g, '<li>$1</li>') // Liste u <li>
           .replace(/(<li>.*<\/li>)/g, '<ul>$1</ul>') // Omotavanje liste u <ul>
-          .replace(/\[([^\]]+)\]\((https?:\/\/[^\s]+)\)/g, '<a href="$2">$1</a>'); // Markdown linkovi u HTML
+          .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1">$1</a>'); // Pretvaranje URL-ova u klikabilne linkove
 
         output.innerHTML += `<div class="message bot-message">Bot: ${aiReply}</div>`;
       } catch (error) {
