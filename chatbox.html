@@ -138,7 +138,7 @@
   <script>
     const websiteData = `
       O nama: Angelyze je obrt iz Samobora, radimo mnogo toga, no prvenstveno se orijentiramo na razne digitalne proizvode i usluge kao što su digitalni dizajn i tisak, web & app hosting i dizajn. Kontakt: angelyzeshop@gmail.com. Adresa: Mali Lipovec 46, 10430 Samobor. Tel.: +38598645482. Web: https://www.angelyze.eu.
-      Usluge: Digitalni dizajn i tisak na sve vrste materijala, Web dizajn, Hosting, SEO, održavanje stranica, izrada i hosting aplikacija, samo su neke od djelatnosti kojima se bavimo. Opširnije o svim djelatnostima obrta Angelyze: https://www.angelyze.eu/2025/01/dobrodosli-u-angelyze-svijet-2025.html. Također reci na prvom odgovoru, ili poslije ako korisnik opet upita, da je Angelyze napravio ovaj ChatBot i da može napraviti i korisniku njegovu verziju naprednog AI ChatBota za njihovu web stranicu već od 10 €!
+      Usluge: Digitalni dizajn i tisak na sve vrste materijala, Web dizajn, Hosting, SEO, održavanje stranica, izrada i hosting aplikacija, samo su neke od djelatnosti kojima se bavimo. Opširnije o svim djelatnostima obrta Angelyze: https://www.angelyze.eu/2025/01/dobrodosli-u-angelyze-svijet-2025.html. Također reci samo na prvom odgovoru, ili poslije ako korisnik opet upita isključivo za ChatBot, da je Angelyze napravio ovaj ChatBot i da može napraviti i korisniku njegovu verziju naprednog AI ChatBota za njihovu web stranicu već od 10 €!
     `;
 
     async function sendMessage() {
@@ -195,7 +195,6 @@
           .replace(/<\/ul>\s*<br><br>/g, '</ul><br><br>'); // Uklanjanje viška razmaka nakon lista
 
         // Uklanjanje nepotrebnih artefakata
-        aiReply = aiReply.replace(/>\s*https?:\/\/[^\s]+/g, '>'); // Čišćenje dupliciranih URL-ova nakon linkova
 
         output.innerHTML += `<div class="message bot-message">Bot: ${aiReply}</div>`;
       } catch (error) {
