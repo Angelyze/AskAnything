@@ -64,6 +64,15 @@
       margin-right: auto;
     }
 
+    .bot-message a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .bot-message a:hover {
+      text-decoration: underline;
+    }
+
     #input-container {
       padding: 10px;
       border-top: 1px solid #eee;
@@ -125,13 +134,13 @@
 
     async function sendMessage() {
       let input = document.getElementById('userInput').value.trim();
-      if (!input) return; // Sprečava slanje praznih poruka
+      if (!input) return;
 
       let output = document.getElementById('chatbox');
       output.innerHTML += `<div class="message user-message">Korisnik: ${input}</div>`;
 
       const prompt = `
-        Korisnik je pitao: "${input}". Na osnovu ovih podataka sa moje stranice, odgovori i uključi link ako je relevantno:
+        Korisnik je pitao: "${input}". Na osnovu ovih podataka sa moje stranice, odgovori na hrvatskom jeziku, koristi kratke i jasne rečenice, uključi klikabilne linkove u formatu HTML <a href="URL">tekst</a> ako je relevantno, i formatiraj tekst sa novim redovima i listama gde je potrebno:
         "${websiteData}"
         Ako nema informacija, daj opći odgovor.
       `;
@@ -161,9 +170,16 @@
         if (!response.ok) throw new Error('API zahtjev nije uspio');
 
         const data = await response.json();
-        const aiReply = data.candidates[0].content.parts[0].text
+        let aiReply = data.candidates[0].content.parts[0].text;
+
+        // Pretvaranje Markdown-a u HTML za bolje formatiranje
+        aiReply = aiReply
           .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Podebljavanje
-          .replace(/\n/g, '<br>'); // Novi redovi
+          .replace(/\n/g, '<br>') // Novi redovi
+          .replace(/\* (.*?)(?=\n|$)/g, '<li>$1</li>') // Liste
+          .replace(/(<li>.*<\/li>)/g, '<ul>$1</ul>') // Omotavanje liste u <ul>
+          .replace(/\[([^\]]+)\]\((https?:\/\/[^\s]+)\)/g, '<a href="$2">$1</a>'); // Markdown linkovi u HTML
+
         output.innerHTML += `<div class="message bot-message">Bot: ${aiReply}</div>`;
       } catch (error) {
         output.innerHTML += `<div class="message bot-message">Bot: Došlo je do greške. Pokušaj ponovo.</div>`;
