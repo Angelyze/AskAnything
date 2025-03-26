@@ -73,13 +73,36 @@
       text-decoration: underline;
     }
 
+    .bot-message > :first-child {
+      margin-top: 0;
+    }
+
+    .bot-message > :last-child {
+      margin-bottom: 0;
+    }
+
     .bot-message ul {
       padding-left: 20px;
       list-style-type: disc;
+      margin: 10px 0;
     }
 
     .bot-message li {
-      margin-bottom: 5px;
+      margin: 5px 0;
+      line-height: 1.5;
+    }
+
+    .bot-message p {
+      margin: 10px 0;
+      line-height: 1.6;
+    }
+
+    .bot-message strong {
+      font-weight: bold;
+    }
+
+    .bot-message em {
+      font-style: italic;
     }
 
     #input-container {
@@ -137,19 +160,214 @@
 
   <script>
     const websiteData = `
-      O nama: Angelyze je obrt iz Samobora, radimo mnogo toga, no prvenstveno se orijentiramo na razne digitalne proizvode i usluge kao što su digitalni dizajn i tisak, web & app hosting i dizajn. Kontakt: angelyzeshop@gmail.com. Adresa: Mali Lipovec 46, 10430 Samobor. Tel.: +38598645482. Web: https://www.angelyze.eu,
-      Usluge: Digitalni dizajn i tisak na sve vrste materijala, Web dizajn, Hosting, SEO, održavanje stranica, izrada i hosting aplikacija, samo su neke od djelatnosti kojima se bavimo. Opširnije o svim djelatnostima obrta Angelyze: https://www.angelyze.eu/2025/01/dobrodosli-u-angelyze-svijet-2025.html
+      O nama: Angelyze je obrt iz Samobora, radimo mnogo toga, no prvenstveno se orijentiramo na razne digitalne proizvode i usluge kao što su digitalni dizajn i tisak, web & app hosting i dizajn. Vlasnik: Anđelko Horvat. Kontakt: angelyzeshop@gmail.com. Adresa: Mali Lipovec 46, 10430 Samobor. Tel.: +38598645482. Web: https://www.angelyze.eu.
+      Usluge prema djelatnostima: 18.12. - Ostalo tiskanje
+Tiskanje različitih materijala, uključujući:
+
+Brošure, letke, plakate.
+Posjetnice, memorandume, dopisnice.
+Naljepnice, etikete, ambalažu.
+Kalendare, rokovnike, bilježnice.
+Tiskanje na različitim materijalima (papir, plastika, tekstil i sl.).
+Digitalni tisak, ofset tisak i druge tehnike tiska.
+
+
+18.13. - Usluge pripreme za tisak i objavljivanje
+Priprema materijala za tisak:
+
+Dizajn i grafička obrada (npr. priprema logotipa, letaka, plakata).
+Obrada slika i tekstova za tisak.
+Provjera i optimizacija datoteka za tisak (provjera rezolucije, formata, boja).
+Priprema za digitalno objavljivanje (npr. e-knjige, PDF materijali).
+Usluge korekcije i lekture tekstova prije tiska.
+
+
+47.91. - Trgovina na malo preko pošte ili interneta, bez skladištenja
+Prodaja proizvoda putem interneta (web trgovina) ili poštom:
+
+Prodaja vlastitih proizvoda (npr. tiskani materijali, dizajnerski proizvodi, igračke, nakit).
+Prodaja usluga (npr. dizajn, tisak, obrada podataka).
+Usluge dropshippinga (prodaja bez fizičkog skladištenja, uz posredovanje).
+Upravljanje narudžbama i dostavom.
+
+
+62.01. - Računalno programiranje
+Razvoj softvera:
+
+Izrada aplikacija i njihovo objavljivanje (desktop, mobilne, web aplikacije).
+Programiranje prilagođenih rješenja za klijente.
+Razvoj i održavanje web stranica.
+Integracija API-ja i drugih sustava.
+
+
+62.02. - Savjetovanje u vezi s računalima
+Savjetovanje o IT rješenjima:
+
+Preporuke za odabir softvera i hardvera.
+Planiranje IT strategije za tvrtke.
+Analiza i optimizacija postojećih IT sustava.
+Savjetovanje o sigurnosti podataka i mreža.
+
+
+62.03. - Upravljanje računalnom opremom i sustavom
+Upravljanje IT infrastrukturom:
+
+Nadzor i održavanje računalnih sustava.
+Upravljanje poslužiteljima, mrežama, bazama podataka.
+Optimizacija performansi sustava.
+Implementacija sigurnosnih mjera (npr. zaštita od cyber napada).
+
+
+62.09. - Ostale uslužne djelatnosti u vezi s informacijskom tehnologijom i računalima
+Pružanje IT usluga:
+
+Instalacija i konfiguracija softvera.
+Održavanje računalnih sustava.
+Rješavanje tehničkih problema (npr. helpdesk usluge).
+Usluge povezane s mrežama (npr. postavljanje i održavanje mreža).
+
+
+63.11. - Obrada podataka, usluge poslužitelja i djelatnosti povezane s njima
+Obrada podataka:
+
+Unos, sortiranje i analiza podataka.
+Digitalizacija dokumenata (npr. skeniranje, pretvorba u digitalni format).
+Usluge povezane s poslužiteljima:
+
+Upravljanje poslužiteljima, hosting usluge.
+Backup i sigurnosne kopije podataka.
+Usluge arhiviranja i upravljanja bazama podataka.
+
+
+63.99. - Ostale informacijske uslužne djelatnosti, d. n.
+Pružanje informacijskih usluga:
+
+Prikupljanje i analiza podataka za klijente.
+Izrada izvještaja, statistika, prezentacija.
+Usluge povezane s informacijskim sustavima (npr. savjetovanje o korištenju softvera).
+Usluge digitalnog marketinga (npr. upravljanje sadržajem, analitika).
+
+
+70.22. - Savjetovanje u vezi s poslovanjem i ostalim upravljanjem
+Poslovno savjetovanje:
+
+Savjetovanje o marketingu, prodaji, upravljanju resursima.
+Upravljanje projektima:
+
+Planiranje, koordinacija i praćenje projekata.
+Savjetovanje o optimizaciji poslovnih procesa.
+
+
+73.11. - Agencije za promidžbu (reklamu i propagandu)
+Usluge oglašavanja:
+
+Izrada reklamnih kampanja (online i offline).
+Dizajn i tisak promotivnih materijala (plakati, letci, banneri).
+Digitalni marketing:
+
+Upravljanje društvenim mrežama, oglašavanje na Googleu, SEO.
+Organizacija promotivnih događanja (npr. sajmovi, prezentacije).
+Izrada video i audio reklama.
+
+
+74.10. - Specijalizirane dizajnerske djelatnosti
+Grafički dizajn:
+
+Izrada logotipa, vizualnog identiteta, brendiranja.
+Dizajn ambalaže, etiketa, plakata, brošura.
+Web dizajn:
+
+Dizajn korisničkog sučelja (UI) i korisničkog iskustva (UX) za web stranice i aplikacije.
+Dizajn proizvoda:
+
+Dizajn igračaka, nakita, promotivnih materijala.
+Dizajn interijera ili eksterijera (npr. promotivni štandovi, izlozi).
+
+
+32.13. - Proizvodnja imitacije nakita (bizuterije) i srodnih proizvoda
+Izrada modnog nakita:
+
+Narukvice, ogrlice, naušnice, prstenje od od UV Resina (smole), kože, gume, tekstila i sl.
+Proizvodnja ukrasnih dodataka (npr. broševi i sl.).
+Dizajn i pakiranje nakita.
+
+
+32.40. - Proizvodnja igara i igračaka
+Proizvodnja različitih igračaka od UV Resina (smole) dobivene 3D Printom.
+Dizajn i personalizacija igračaka.
+Proizvodnja dijelova za igračke (npr. figure, kocke, pribor).
+
+
+32.99. - Ostala preradivačka industrija, d. n., osim proizvodnje žigova za datiranje, pečaćenje ili numeriranje, ručnih naprava za otiskivanje natpisa ili gravura
+Proizvodnja raznih proizvoda koji nisu obuhvaćeni drugim kategorijama:
+
+Dekorativni predmeti, suveniri, promotivni materijali.
+Prilagođeni proizvodi (npr. personalizirani pokloni).
+Obrada materijala (npr. rezanje, oblikovanje, spajanje, lijepljenje).. Opširnije o svim djelatnostima obrta Angelyze: https://www.angelyze.eu/2025/01/dobrodosli-u-angelyze-svijet-2025.html. Angelyze je recimo napravio ovaj ChatBot i može napraviti i korisniku njegovu verziju naprednog AI ChatBota za njihovu web stranicu već od 10 €!
     `;
+
+    // Početna poruka prilikom pokretanja
+    window.onload = function() {
+      let output = document.getElementById('chatbox');
+      let initialMessage = "👋 Pozdrav i dobrodošli na web stranicu Angelyze, kako vam možemo pomoći?";
+      output.innerHTML += `<div class="message bot-message">${formatMessage(initialMessage)}</div>`;
+    };
+
+    function formatMessage(message) {
+      message = message.trim();
+      const lines = message.split('\n');
+      let html = '';
+      let inList = false;
+      let listType = '';
+
+      lines.forEach(line => {
+        if (line.trim() === '') {
+          if (inList) {
+            html += `</${listType}>`;
+            inList = false;
+          }
+          html += '<br>';
+        } else if (line.startsWith('* ') || line.startsWith('- ')) {
+          if (!inList || listType !== 'ul') {
+            if (inList) html += `</${listType}>`;
+            html += '<ul>';
+            inList = true;
+            listType = 'ul';
+          }
+          html += `<li>${line.substring(2).trim()}</li>`;
+        } else {
+          if (inList) {
+            html += `</${listType}>`;
+            inList = false;
+          }
+          html += `<p>${line.trim()}</p>`;
+        }
+      });
+
+      if (inList) {
+        html += `</${listType}>`;
+      }
+
+      // Formatiranje podebljanog i kurziva
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+      // Pretvaranje URL-ova i e-mailova u jednostavne klikabilne linkove
+      html = html.replace(/\b(https?:\/\/[^\s]+)\b/g, '<a href="$1">$1</a>');
+      html = html.replace(/\b([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\b/g, '<a href="mailto:$1">$1</a>');
+
+      return html;
+    }
 
     async function sendMessage() {
       let input = document.getElementById('userInput').value.trim();
       if (!input) return;
 
       let output = document.getElementById('chatbox');
-      output.innerHTML += `<div class="message user-message">Korisnik: ${input}</div>`;
+      output.innerHTML += `<div class="message user-message">${input}</div>`;
 
       const prompt = `
-        Korisnik je pitao: "${input}". Na osnovu podataka s moje web stranice, odgovori na hrvatskom jeziku. Dodaj emoji za pozdrav (👋) samo na prvo pitanje. Također reci samo na prvom odgovoru, ili poslije ako korisnik opet upita isključivo za ChatBot, da je Angelyze napravio ovaj ChatBot i da može napraviti i korisniku njegovu verziju naprednog AI ChatBota za njihovu web stranicu već od 10 €! Izbjegavaj nepotrebne simbole.
+        Korisnik je pitao: "${input}". Na osnovu podataka s moje web stranice, odgovori na hrvatskom jeziku. Koristi smislene rečenice te se probaj nadovezati pitanjem. Formatiraj liste s " * " za bullet točke. Dodaj novi red između odjeljaka. Izbjegavaj nepotrebne simbole.
         "${websiteData}"
 
         Ako nema dovoljno informacija, daj opći odgovor: "Nemam dovoljno informacija za točno odgovoriti. 😕 Posjetite našu stranicu https://www.angelyze.eu za više detalja."
@@ -182,24 +400,12 @@
         const data = await response.json();
         let aiReply = data.candidates[0].content.parts[0].text;
 
-        // Ručno formatiranje odgovora
-        aiReply = aiReply
-          .replace(/\n\n/g, '<br><br>') // Odjeljci
-          .replace(/\n/g, '\n') // Zadržavamo nove redove za liste
-          .replace(/(\w+:\s*\n)/g, '$1') // Naslovi lista ostaju netaknuti
-          .replace(/\*+\s*(.*?)(?=\n|$)/g, '<li>$1</li>') // Pretvaranje "* " u <li>
-          .replace(/(<li>[\s\S]*<\/li>)/g, '<ul>$1</ul>') // Omotavanje liste u <ul>
-          .replace(/\b(https?:\/\/[^\s]+)\b(?![\'"]>)/g, '<a href="$1">$1</a>') // Obični URL-ovi
-          .replace(/\b([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\b(?![\'"]>)/g, '<a href="mailto:$1">$1</a>') // E-mailovi
-          .replace(/<br><br>\s*<ul>/g, '<br><ul>') // Uklanjanje viška razmaka prije lista
-          .replace(/<\/ul>\s*<br><br>/g, '</ul><br><br>'); // Uklanjanje viška razmaka nakon lista
+        // Formatiranje odgovora
+        aiReply = formatMessage(aiReply);
 
-        // Uklanjanje nepotrebnih artefakata
-        aiReply = aiReply.replace(/>\s*https?:\/\/[^\s]+/g, '>'); // Čišćenje dupliciranih URL-ova nakon linkova
-
-        output.innerHTML += `<div class="message bot-message">Bot: ${aiReply}</div>`;
+        output.innerHTML += `<div class="message bot-message">${aiReply}</div>`;
       } catch (error) {
-        output.innerHTML += `<div class="message bot-message">Bot: Došlo je do greške. 😞 Pokušaj ponovo.</div>`;
+        output.innerHTML += `<div class="message bot-message">Došlo je do greške. 😞 Pokušaj ponovo.</div>`;
         console.error(error);
       }
 
