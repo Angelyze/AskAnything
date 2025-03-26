@@ -140,7 +140,7 @@
     output.innerHTML += `<div class="message user-message">Korisnik: ${input}</div>`;
 
     const prompt = `
-      Korisnik je pitao: "${input}". Na osnovu ovih podataka sa moje stranice, odgovori na hrvatskom jeziku. Dodaj emoji za pozdrav (👋) samo na prvo pitanje. Uključi klikabilne linkove u Markdown formatu [tekst](URL) ako je relevantno (za email koristi mailto:). Dodaj novi red između odjeljaka za bolju čitljivost. Ne dodavaj nepotrebne simbole:
+      Korisnik je pitao: "${input}". Na osnovu ovih podataka sa moje stranice, odgovori na hrvatskom jeziku. Dodaj emoji za pozdrav (👋) samo na prvo pitanje. Koristi kratke i jasne rečenice. Uključi klikabilne linkove u Markdown formatu [tekst](URL) ako je relevantno (za email koristi mailto:). Za liste koristi samo novi red između stavki bez "*" simbola, jer ću ih kasnije formatirati kao bullet-e. Dodaj novi red između odjeljaka za bolju čitljivost. Ne dodavaj nepotrebne simbole:
       "${websiteData}"
       Ako nema informacija, daj opći odgovor: "Nemam dovoljno informacija za točno odgovoriti. 😕 Posjetite našu stranicu [https://www.angelyze.eu](https://www.angelyze.eu) za više detalja."
     `;
@@ -174,12 +174,20 @@
 
       // Obrada teksta za formatiranje i Markdown linkove
       aiReply = aiReply
+        .replace(/\n\n/g, '\nLIST_START\n') // Označavanje početka liste
         .replace(/\n/g, '<br>') // Novi redovi
+        .replace(/LIST_START<br>/g, '<ul>') // Početak liste
+        .replace(/<br>(?![<])/g, '</li><li>') // Pretvaranje redova u <li> unutar liste
+        .replace(/<ul><\/li><li>/g, '<ul>') // Čišćenje praznih <li> na početku
+        .replace(/<\/li><li>$/, '</li></ul>') // Zatvaranje liste
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Podebljavanje
         .replace(/\[([^\]]+)\]\((https?:\/\/[^\s]+|mailto:[^\s]+)\)/g, '<a href="$2">$1</a>') // Markdown linkovi u HTML
-        .replace(/\* (.*?)(?=\n|$)/g, '<li>$1</li>') // Bullet liste u <li>
-        .replace(/(<li>.*<\/li>)/g, '<ul>$1</ul>') // Omotavanje liste u <ul>
-        .replace(/(<br>){2,}/g, '<br><br>'); // Ograničavanje višestrukih razmaka
+        .replace(/\* (.*?)(?=\n|$)/g, '<li>$1</li>'); // Ako Gemini ipak doda *, pretvori u <li>
+
+      // Dodatna korekcija za slučaj da lista nije zatvorena
+      if (aiReply.includes('<ul>') && !aiReply.includes('</ul>')) {
+        aiReply += '</ul>';
+      }
 
       output.innerHTML += `<div class="message bot-message">Bot: ${aiReply}</div>`;
     } catch (error) {
