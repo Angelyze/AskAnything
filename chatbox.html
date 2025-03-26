@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    #chatbox { border: 1px solid #ccc; padding: 10px; width: 300px; height: 400px; overflow-y: scroll; }
+    #userInput { width: 70%; } button { width: 25%; }
+  </style>
+</head>
+<body>
+  <div id="chatbox"></div>
+  <input id="userInput" type="text" placeholder="Piši ovde...">
+  <button onclick="sendMessage()">Pošalji</button>
+
+  <script>
+    const websiteData = `
+      O nama: Angelyze je obrt iz Samobora, radimo mnogo toga, no prvenstveno se orijentiramo na razne digitalne proizvode i usluge kao što su web hosting i dizajn. Kontakt: angelyzeshop@gmail.com.
+      Usluge: Digitalni dizajn i tisak na sve vrste materijala, Web dizajn, Hosting, SEO, održavanje stranica, izrada i hosting aplikacija, samo su neke od djelatnosti kojima se bavimo. Opširnije o svim djelatnostima obrta Angelyze: https://www.angelyze.eu/2025/01/dobrodosli-u-angelyze-svijet-2025.html
+    `;
+
+    async function sendMessage() {
+      let input = document.getElementById('userInput').value;
+      let output = document.getElementById('chatbox');
+      output.innerHTML += `<p>Korisnik: ${input}</p>`;
+
+      const prompt = `
+        Korisnik je pitao: "${input}". Na osnovu ovih podataka sa moje stranice, odgovori i uključi link ako je relevantno:
+        "${websiteData}"
+        Ako nema informacija, daj opći odgovor.
+      `;
+
+      const apiKey = 'AIzaSyAI_KIwh_7HSu9qz7e4-8YNgxGF5cB5U2A'; // Zamjeni sa svojim Gemini API ključem
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: prompt
+              }]
+            }],
+            generationConfig: {
+              maxOutputTokens: 150,
+              temperature: 0.7
+            }
+          })
+        });
+
+        const data = await response.json();
+        const aiReply = data.candidates[0].content.parts[0].text;
+        output.innerHTML += `<p>Bot: ${aiReply}</p>`;
+      } catch (error) {
+        output.innerHTML += `<p>Bot: Došlo je do greške. Pokušaj ponovo.</p>`;
+        console.error(error);
+      }
+
+      document.getElementById('userInput').value = '';
+      output.scrollTop = output.scrollHeight;
+    }
+
+    document.getElementById('userInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  </script>
+</body>
+</html>
