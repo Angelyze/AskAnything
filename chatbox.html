@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <!-- Uključivanje marked.js preko unpkg CDN-a za kompatibilnost sa pregledačima -->
-  <script src="https://unpkg.com/marked@4.0.12/lib/marked.js"></script>
+  <!-- Uključivanje marked.js preko unpkg CDN-a, najnovija verzija -->
+  <script src="https://unpkg.com/marked@4.3.0/lib/marked.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -129,6 +129,11 @@
   </div>
 
   <script>
+    // Provera da li je marked učitan
+    if (typeof marked === 'undefined') {
+      console.error('marked.js nije učitan. Proveri CDN link ili internet konekciju.');
+    }
+
     const websiteData = `
       O nama: Angelyze je obrt iz Samobora, radimo mnogo toga, no prvenstveno se orijentiramo na razne digitalne proizvode i usluge kao što su digitalni dizajn i tisak, web & app hosting i dizajn. Kontakt: angelyzeshop@gmail.com. Adresa: Mali Lipovec 46, 10430 Samobor. Tel.: +38598645482. Web: https://www.angelyze.eu.
       Usluge: Digitalni dizajn i tisak na sve vrste materijala, Web dizajn, Hosting, SEO, održavanje stranica, izrada i hosting aplikacija, samo su neke od djelatnosti kojima se bavimo. Opširnije o svim djelatnostima obrta Angelyze: https://www.angelyze.eu/2025/01/dobrodosli-u-angelyze-svijet-2025.html. Također reci da je Angelyze napravio ovaj ChatBot i da može napraviti i korisniku njegovu verziju naprednog AI ChatBota za njihovu web stranicu već od 10 €!
@@ -200,6 +205,9 @@
         let aiReply = data.candidates[0].content.parts[0].text;
 
         // Konverzija Markdown-a u HTML pomoću marked.js
+        if (typeof marked === 'undefined') {
+          throw new Error('marked.js nije dostupan');
+        }
         let html = marked.parse(aiReply);
 
         output.innerHTML += `<div class="message bot-message">Bot: ${html}</div>`;
