@@ -1,15 +1,121 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <style>
-    #chatbox { border: 1px solid #ccc; padding: 10px; width: 300px; height: 400px; overflow-y: scroll; }
-    #userInput { width: 70%; } button { width: 25%; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #chat-container {
+      position: relative;
+      width: 350px;
+      height: 500px;
+      background: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #chatbox {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #ccc #f0f2f5;
+    }
+
+    #chatbox::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #chatbox::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 4px;
+    }
+
+    .message {
+      margin: 10px 0;
+      padding: 10px 15px;
+      border-radius: 10px;
+      max-width: 80%;
+      word-wrap: break-word;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    .user-message {
+      background: #007bff;
+      color: white;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .bot-message {
+      background: #e9ecef;
+      color: #333;
+      margin-right: auto;
+    }
+
+    #input-container {
+      padding: 10px;
+      border-top: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      background: #f8f9fa;
+    }
+
+    #userInput {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      outline: none;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    #userInput:focus {
+      border-color: #007bff;
+    }
+
+    #sendButton {
+      margin-left: 10px;
+      padding: 8px 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+
+    #sendButton:hover {
+      background: #0056b3;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
-  <div id="chatbox"></div>
-  <input id="userInput" type="text" placeholder="Piši ovde...">
-  <button onclick="sendMessage()">Pošalji</button>
+  <div id="chat-container">
+    <div id="chatbox"></div>
+    <div id="input-container">
+      <input id="userInput" type="text" placeholder="Piši ovde...">
+      <button id="sendButton" onclick="sendMessage()">Pošalji</button>
+    </div>
+  </div>
 
   <script>
     const websiteData = `
@@ -18,9 +124,11 @@
     `;
 
     async function sendMessage() {
-      let input = document.getElementById('userInput').value;
+      let input = document.getElementById('userInput').value.trim();
+      if (!input) return; // Sprečava slanje praznih poruka
+
       let output = document.getElementById('chatbox');
-      output.innerHTML += `<p>Korisnik: ${input}</p>`;
+      output.innerHTML += `<div class="message user-message">Korisnik: ${input}</div>`;
 
       const prompt = `
         Korisnik je pitao: "${input}". Na osnovu ovih podataka sa moje stranice, odgovori i uključi link ako je relevantno:
@@ -28,7 +136,7 @@
         Ako nema informacija, daj opći odgovor.
       `;
 
-      const apiKey = 'AIzaSyAI_KIwh_7HSu9qz7e4-8YNgxGF5cB5U2A'; // Zamjeni sa svojim Gemini API ključem
+      const apiKey = 'AIzaSyAI_KIwh_7HSu9qz7e4-8YNgxGF5cB5U2A'; // Zameni sa svojim Gemini API ključem
       const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
       try {
@@ -50,11 +158,15 @@
           })
         });
 
+        if (!response.ok) throw new Error('API zahtjev nije uspio');
+
         const data = await response.json();
-        const aiReply = data.candidates[0].content.parts[0].text;
-        output.innerHTML += `<p>Bot: ${aiReply}</p>`;
+        const aiReply = data.candidates[0].content.parts[0].text
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Podebljavanje
+          .replace(/\n/g, '<br>'); // Novi redovi
+        output.innerHTML += `<div class="message bot-message">Bot: ${aiReply}</div>`;
       } catch (error) {
-        output.innerHTML += `<p>Bot: Došlo je do greške. Pokušaj ponovo.</p>`;
+        output.innerHTML += `<div class="message bot-message">Bot: Došlo je do greške. Pokušaj ponovo.</div>`;
         console.error(error);
       }
 
