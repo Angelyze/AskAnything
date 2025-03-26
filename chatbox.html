@@ -177,7 +177,6 @@
         .replace(/\n\n/g, '\nLIST_START\n') // Označavanje početka liste
         .replace(/\n/g, '<br>') // Novi redovi
         .replace(/LIST_START<br>/g, '<ul>') // Početak liste
-        .replace(/<br>(?![<])/g, '</li><li>') // Pretvaranje redova u <li> unutar liste
         .replace(/<ul><\/li><li>/g, '<ul>') // Čišćenje praznih <li> na početku
         .replace(/<\/li><li>$/, '</li></ul>') // Zatvaranje liste
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Podebljavanje
