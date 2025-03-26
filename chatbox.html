@@ -189,7 +189,6 @@
           .replace(/(\w+:\s*\n)/g, '$1') // Naslovi lista ostaju netaknuti
           .replace(/\*+\s*(.*?)(?=\n|$)/g, '<li>$1</li>') // Pretvaranje "* " u <li>
           .replace(/(<li>[\s\S]*<\/li>)/g, '<ul>$1</ul>') // Omotavanje liste u <ul>
-          .replace(/\b(https?:\/\/[^\s]+)\b(?![\'"]>)/g, '<a href="$1">$1</a>') // Obični URL-ovi
           .replace(/<br><br>\s*<ul>/g, '<br><ul>') // Uklanjanje viška razmaka prije lista
           .replace(/<\/ul>\s*<br><br>/g, '</ul><br><br>'); // Uklanjanje viška razmaka nakon lista
 
