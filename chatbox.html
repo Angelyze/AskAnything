@@ -2,8 +2,6 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <!-- Uključivanje marked.js preko unpkg CDN-a, najnovija verzija koja radi u pregledaču -->
-  <script src="https://unpkg.com/marked@4.3.0/lib/marked.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -123,20 +121,15 @@
   <div id="chat-container">
     <div id="chatbox"></div>
     <div id="input-container">
-      <input id="userInput" type="text" placeholder="Piši ovde...">
-      <button id="sendButton" onclick="sendMessage()">Pošalji</button>
+      <input id="userInput" type="text" placeholder="Type here...">
+      <button id="sendButton" onclick="sendMessage()">Send</button>
     </div>
   </div>
 
   <script>
-    // Provera da li je marked učitan
-    if (typeof marked === 'undefined') {
-      console.error('marked.js nije učitan. Proveri CDN link ili internet konekciju.');
-    }
-
     const websiteData = `
-      O nama: Angelyze je obrt iz Samobora, radimo mnogo toga, no prvenstveno se orijentiramo na razne digitalne proizvode i usluge kao što su digitalni dizajn i tisak, web & app hosting i dizajn. Kontakt: angelyzeshop@gmail.com. Adresa: Mali Lipovec 46, 10430 Samobor. Tel.: +38598645482. Web: https://www.angelyze.eu.
-      Usluge: Digitalni dizajn i tisak na sve vrste materijala, Web dizajn, Hosting, SEO, održavanje stranica, izrada i hosting aplikacija, samo su neke od djelatnosti kojima se bavimo. Opširnije o svim djelatnostima obrta Angelyze: https://www.angelyze.eu/2025/01/dobrodosli-u-angelyze-svijet-2025.html. Također reci da je Angelyze napravio ovaj ChatBot i da može napraviti i korisniku njegovu verziju naprednog AI ChatBota za njihovu web stranicu već od 10 €!
+      About us: Angelyze is a small business from Samobor, offering various digital products and services such as digital design and printing, web & app hosting, and design. Contact: angelyzeshop@gmail.com. Address: Mali Lipovec 46, 10430 Samobor. Phone: +38598645482. Website: https://www.angelyze.eu.
+      Services: Digital design and printing on all kinds of materials, web design, hosting, SEO, website maintenance, app development and hosting are some of the services we provide. More details about Angelyze’s activities: https://www.angelyze.eu/2025/01/welcome-to-angelyze-world-2025.html. Also mention that Angelyze created this ChatBot and can make a custom advanced AI ChatBot for the user’s website starting at just 10 €!
     `;
 
     async function sendMessage() {
@@ -144,40 +137,40 @@
       if (!input) return;
 
       let output = document.getElementById('chatbox');
-      output.innerHTML += `<div class="message user-message">Korisnik: ${input}</div>`;
+      output.innerHTML += `<div class="message user-message">User: ${input}</div>`;
 
       const prompt = `
-        Korisnik je pitao: "${input}". Na osnovu ovih podataka sa moje stranice, odgovori na hrvatskom jeziku. Dodaj emoji za pozdrav (👋) samo na prvo pitanje. Koristi kratke i jasne rečenice. Uključi klikabilne linkove u Markdown formatu [tekst](URL) ako je relevantno (za email koristi [email](mailto:email)). Formatiraj liste tako da svaka stavka počinje sa "* " za bullet liste. Dodaj novi red između odjeljaka za bolju čitljivost. Ne dodavaj nepotrebne simbole.
+        The user asked: "${input}". Based on the data from my website, respond in English. Add a greeting emoji (👋) only for the first question. Use short, clear sentences. Include clickable links in Markdown format [text](URL) if relevant (use [email](mailto:email) for email). Format lists with "* " for bullet points. Add a new line between sections for readability. Avoid unnecessary symbols.
 
-        Primjer odgovora:
-        Pozdrav! 👋
+        Example response:
+        Hello! 👋
 
-        Dobar dan! Angelyze je obrt iz Samobora koji se bavi digitalnim proizvodima i uslugama.
+        Good day! Angelyze is a small business from Samobor focusing on digital products and services.
 
-        Nudimo:
-        * Digitalni dizajn i tisak na sve vrste materijala
-        * Web dizajn
+        We offer:
+        * Digital design and printing on all kinds of materials
+        * Web design
         * Hosting
         * SEO
-        * Održavanje stranica
-        * Izrada i hosting aplikacija
+        * Website maintenance
+        * App development and hosting
 
-        Za više informacija o našim djelatnostima posjetite [ovu stranicu](https://www.angelyze.eu/2025/01/dobrodosli-u-angelyze-svijet-2025.html).
+        For more details about our services, visit [this page](https://www.angelyze.eu/2025/01/welcome-to-angelyze-world-2025.html).
 
-        Možete nas kontaktirati putem:
+        Contact us via:
         * Email: [angelyzeshop@gmail.com](mailto:angelyzeshop@gmail.com)
-        * Telefon: +38598645482
-        * Web stranica: [https://www.angelyze.eu](https://www.angelyze.eu)
-        * Adresa: Mali Lipovec 46, 10430 Samobor
+        * Phone: +38598645482
+        * Website: [https://www.angelyze.eu](https://www.angelyze.eu)
+        * Address: Mali Lipovec 46, 10430 Samobor
 
-        Angelyze je izradio ovaj ChatBot! Možemo napraviti i Vašu verziju naprednog AI ChatBota za Vašu web stranicu već od 10 €!
+        Angelyze created this ChatBot! We can build a custom advanced AI ChatBot for your website starting at just 10 €!
 
         "${websiteData}"
 
-        Ako nema informacija, daj opći odgovor: "Nemam dovoljno informacija za točno odgovoriti. 😕 Posjetite našu stranicu [https://www.angelyze.eu](https://www.angelyze.eu) za više detalja."
+        If there's not enough info, give a general response: "I don’t have enough information to answer precisely. 😕 Visit our site [https://www.angelyze.eu](https://www.angelyze.eu) for more details."
       `;
 
-      const apiKey = 'AIzaSyAI_KIwh_7HSu9qz7e4-8YNgxGF5cB5U2A'; // Zameni sa svojim Gemini API ključem
+      const apiKey = 'YOUR_API_KEY_HERE'; // Replace with your actual Gemini API key
       const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
       try {
@@ -193,28 +186,28 @@
               }]
             }],
             generationConfig: {
-              maxOutputTokens: 500, // Dovoljno za potpuni odgovor
+              maxOutputTokens: 500,
               temperature: 0.7
             }
           })
         });
 
-        if (!response.ok) throw new Error('API zahtjev nije uspio');
+        if (!response.ok) throw new Error('API request failed');
 
         const data = await response.json();
         let aiReply = data.candidates[0].content.parts[0].text;
 
-        // Provera da li je marked dostupan pre parsiranja
-        if (typeof marked === 'undefined') {
-          throw new Error('marked.js nije učitan ili nije dostupan');
-        }
+        // Manually format Markdown-like syntax into HTML
+        aiReply = aiReply
+          .replace(/\n\n/g, '<br><br>') // Paragraph breaks
+          .replace(/\n/g, ' ') // Replace single newlines with spaces within paragraphs
+          .replace(/\* (.*?)(?=\n|$)/g, '<li>$1</li>') // Convert "* item" to "<li>item</li>"
+          .replace(/(<li>.*<\/li>)/g, '<ul>$1</ul>') // Wrap list items in <ul> tags
+          .replace(/\[([^\]]+)\]\((https?:\/\/[^\s]+|mailto:[^\s]+)\)/g, '<a href="$2">$1</a>'); // Convert [text](URL) to links
 
-        // Konverzija Markdown-a u HTML pomoću marked.js
-        let html = marked.parse(aiReply);
-
-        output.innerHTML += `<div class="message bot-message">Bot: ${html}</div>`;
+        output.innerHTML += `<div class="message bot-message">Bot: ${aiReply}</div>`;
       } catch (error) {
-        output.innerHTML += `<div class="message bot-message">Bot: Došlo je do greške. 😞 Pokušaj ponovo.</div>`;
+        output.innerHTML += `<div class="message bot-message">Bot: Something went wrong. 😞 Please try again.</div>`;
         console.error(error);
       }
 
